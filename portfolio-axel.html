@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Axel DEGRADOT — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f2ee;
+    --bg2: #ede9e3;
+    --surface: #ffffff;
+    --surface2: #f0ece6;
+    --text: #1a1814;
+    --text2: #5a5650;
+    --accent: #3d6b5e;
+    --accent2: #c8a96e;
+    --border: rgba(0,0,0,0.08);
+    --shadow: 0 4px 32px rgba(0,0,0,0.07);
+    --radius: 18px;
+    --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  [data-theme="dark"] {
+    --bg: #0f1110;
+    --bg2: #161a18;
+    --surface: #1c2220;
+    --surface2: #222926;
+    --text: #e8e4de;
+    --text2: #8a9490;
+    --accent: #5a9e8e;
+    --accent2: #c8a96e;
+    --border: rgba(255,255,255,0.07);
+    --shadow: 0 4px 32px rgba(0,0,0,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background var(--transition), color var(--transition);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text2);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+
+  /* Theme toggle */
+  .theme-toggle {
+    width: 44px; height: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    cursor: pointer;
+    position: relative;
+    transition: background var(--transition);
+  }
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    top: 3px; left: 3px;
+    transition: transform var(--transition);
+  }
+  [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
+  .theme-icon { font-size: 0.75rem; position: absolute; top: 50%; transform: translateY(-50%); }
+  .theme-icon.sun { right: 6px; }
+  .theme-icon.moon { left: 6px; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 60% 60% at 75% 40%, color-mix(in srgb, var(--accent) 12%, transparent), transparent),
+                radial-gradient(ellipse 40% 50% at 20% 70%, color-mix(in srgb, var(--accent2) 8%, transparent), transparent);
+    transition: background var(--transition);
+  }
+  .hero-noise {
+    position: absolute; inset: 0; z-index: 1; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 16px 6px 10px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 36px;
+    letter-spacing: 0.02em;
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-tagline {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: var(--text2);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-scroll {
+    position: absolute; bottom: 32px; right: 48px; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 0.7rem; color: var(--text2); letter-spacing: 0.12em; text-transform: uppercase;
+    animation: fadeUp 1s 0.6s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollDown 1.8s ease infinite;
+  }
+  @keyframes scrollDown { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 48px; }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 0 0 32px; height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 60px;
+  }
+
+  /* ── À PROPOS ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .about-text {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text2);
+  }
+  .about-text strong { color: var(--text); font-weight: 500; }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  /* ── COMPÉTENCES ── */
+  .skills-section { background: var(--bg2); transition: background var(--transition); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .skill-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .skill-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  .skill-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .skill-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tag {
+    font-size: 0.76rem;
+    padding: 4px 12px;
+    border-radius: 99px;
+    background: var(--surface2);
+    color: var(--text2);
+    border: 1px solid var(--border);
+    font-weight: 400;
+  }
+
+  /* ── EXPÉRIENCES ── */
+  .exp-list { display: flex; flex-direction: column; gap: 2px; }
+  .exp-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    margin-bottom: 12px;
+  }
+  .exp-item:hover { transform: translateX(6px); box-shadow: var(--shadow); }
+  .exp-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .exp-company {
+    font-size: 0.88rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .exp-desc {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .exp-period {
+    font-size: 0.78rem;
+    color: var(--text2);
+    white-space: nowrap;
+    padding: 4px 14px;
+    background: var(--surface2);
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    height: fit-content;
+  }
+
+  /* ── CERTIFICATIONS ── */
+  .certs-section { background: var(--bg2); transition: background var(--transition); }
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 26px;
+    display: flex; flex-direction: column; gap: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative; overflow: hidden;
+  }
+  .cert-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .cert-card.obtained::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .cert-card.inprogress::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: repeating-linear-gradient(90deg, var(--accent2) 0, var(--accent2) 12px, transparent 12px, transparent 18px);
+  }
+  .cert-header {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  }
+  .cert-logo {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .cert-status {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 99px;
+  }
+  .cert-status.ok {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+  }
+  .cert-status.planned {
+    background: color-mix(in srgb, var(--accent2) 15%, transparent);
+    color: var(--accent2);
+  }
+  .cert-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .cert-org { font-size: 0.82rem; color: var(--text2); }
+  .cert-year {
+    font-size: 0.78rem;
+    color: var(--text2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cert-year::before {
+    content: '';
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent2);
+    flex-shrink: 0;
+  }
+
+  /* ── FORMATION ── */
+  .edu-list { display: flex; flex-direction: column; gap: 12px; }
+  .edu-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    display: flex; align-items: center; gap: 24px;
+    transition: transform 0.25s ease;
+  }
+  .edu-item:hover { transform: translateX(6px); }
+  .edu-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
+  }
+  .edu-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .edu-school { font-size: 0.84rem; color: var(--accent); }
+  .edu-period { font-size: 0.78rem; color: var(--text2); margin-left: auto; white-space: nowrap; }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    text-align: center;
+    padding: 120px 48px;
+    position: relative; overflow: hidden;
+  }
+  .contact-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 50% 70% at 50% 50%, color-mix(in srgb, var(--accent) 8%, transparent), transparent);
+  }
+  .contact-section > * { position: relative; z-index: 1; }
+  .contact-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .contact-sub {
+    font-size: 1rem;
+    color: var(--text2);
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .contact-links {
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.88rem;
+    transition: all 0.25s ease;
+  }
+  .contact-link:hover { transform: translateY(-3px); box-shadow: var(--shadow); background: var(--accent); color: #fff; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 28px 48px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem;
+    color: var(--text2);
+  }
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px; height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .hamburger:hover { background: var(--surface2); }
+  .hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile menu overlay */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 99;
+    background: var(--bg);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .mobile-menu.open {
+    display: flex;
+    opacity: 1;
+    pointer-events: all;
+  }
+  .mobile-menu a {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    padding: 12px 24px;
+    border-radius: 12px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--accent); background: var(--surface2); }
+  .mobile-menu-footer {
+    position: absolute;
+    bottom: 40px;
+    font-size: 0.78rem;
+    color: var(--text2);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 64px 20px; }
+    .hero { padding: 0 20px 64px; min-height: 100svh; }
+    .hero-name { font-size: clamp(2.8rem, 14vw, 5rem); margin-bottom: 20px; }
+    .hero-tagline { font-size: 0.95rem; margin-bottom: 0; }
+    .hero-badge { font-size: 0.72rem; margin-bottom: 28px; }
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 12px; }
+    .exp-period { align-self: flex-start; }
+    .certs-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .cert-card { padding: 20px 18px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .contact-title { font-size: clamp(2rem, 10vw, 3.5rem); }
+    .contact-links { flex-direction: column; align-items: center; }
+    footer { padding: 24px 20px; flex-direction: column; gap: 6px; text-align: center; }
+    .hero-scroll { display: none; }
+    .section-title { font-size: clamp(1.7rem, 7vw, 2.4rem); margin-bottom: 36px; }
+  }
+
+  @media (max-width: 420px) {
+    .certs-grid { grid-template-columns: 1fr; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">AD.</a>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#experience">Expériences</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème"></button>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">À propos</a>
+  <a href="#skills" onclick="closeMenu()">Compétences</a>
+  <a href="#experience" onclick="closeMenu()">Expériences</a>
+  <a href="#certifications" onclick="closeMenu()">Certifications</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <div class="mobile-menu-footer">Axel DEGRADOT — Portfolio</div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Disponible pour alternance — 2026/2027
+    </div>
+    <h1 class="hero-name">Axel<br><span>DEGRADOT</span></h1>
+    <p class="hero-tagline">Je construis des infrastructures robustes — et je m'assure qu'elles restent debout. Admin systèmes & réseaux, passionné par la cybersécurité.</p>
+
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- À PROPOS -->
+<section id="about">
+  <div class="section-label">À propos</div>
+  <h2 class="section-title">Qui suis-je ?</h2>
+  <div class="about-grid">
+    <div>
+      <p class="about-text">
+        Alternant <strong>Technicien Supérieur Systèmes & Réseaux</strong> chez Soparco depuis 2 ans, je poursuis un <strong>Bachelor Administrateur d'Infrastructure Sécurisée</strong> à EKOD Le Mans.<br><br>
+        Passionné par la sécurité des systèmes, j'aime diagnostiquer, construire et durcir des infrastructures qui tiennent la route — au sens propre comme au figuré. Rigoureux sur le terrain, à l'aise en équipe, je cherche une alternance pour ma troisième année afin d'approfondir mes expertises en cybersécurité.
+      </p>
+      <br>
+      <p class="about-text">
+        📍 Val-au-Perche (61) &nbsp;·&nbsp; 🚗 Permis B, véhicule personnel &nbsp;·&nbsp; 🏋️ Musculation & Running
+      </p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">ans d'alternance chez Soparco</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">BTS</div>
+        <div class="stat-label">TSSR en cours à EKOD</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">hyperviseurs maîtrisés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">technologies déployées</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPÉTENCES -->
+<section id="skills" class="skills-section">
+  <div class="section-label">Compétences</div>
+  <h2 class="section-title">Ce que je maîtrise</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">🖥️</div>
+      <h3>Système</h3>
+      <div class="skill-tags">
+        <span class="tag">Active Directory</span>
+        <span class="tag">DHCP / DNS</span>
+        <span class="tag">PowerShell</span>
+        <span class="tag">Bash</span>
+        <span class="tag">WordPress</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Guacamole</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔌</div>
+      <h3>Réseaux</h3>
+      <div class="skill-tags">
+        <span class="tag">Cisco</span>
+        <span class="tag">Aruba</span>
+        <span class="tag">TP-Link</span>
+        <span class="tag">D-Link</span>
+        <span class="tag">VLAN</span>
+        <span class="tag">Trunk / Access</span>
+        <span class="tag">Routage</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⚡</div>
+      <h3>Virtualisation</h3>
+      <div class="skill-tags">
+        <span class="tag">Proxmox</span>
+        <span class="tag">VMware vSphere</span>
+        <span class="tag">VirtualBox</span>
+        <span class="tag">VMware Workstation</span>
+        <span class="tag">Clusters Proxmox</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔒</div>
+      <h3>Sécurité & Sauvegardes</h3>
+      <div class="skill-tags">
+        <span class="tag">IPFire</span>
+        <span class="tag">Kaspersky</span>
+        <span class="tag">Pare-feu</span>
+        <span class="tag">Durcissement</span>
+        <span class="tag">Backup bande</span>
+        <span class="tag">Backup cloud</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPÉRIENCES -->
+<section id="experience">
+  <div class="section-label">Expériences</div>
+  <h2 class="section-title">Mon parcours</h2>
+  <div class="exp-list">
+    <div class="exp-item">
+      <div>
+        <div class="exp-role">Alternant Technicien Supérieur Systèmes & Réseaux</div>
+        <div class="exp-company">Soparco — Condé-sur-Huisne</div>
+        <div class="exp-desc">Administration quotidienne de l'infrastructure IT : gestion des comptes Active Directory, configuration réseau, déploiement de services (Docker, Guacamole, pare-feu IPFire), scripting PowerShell & Bash, gestion des sauvegardes.</div>
+      </div>
+      <div class="exp-period">Sept. 2024 → Août 2026</div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-role">Stage Informatique</div>
+        <div class="exp-company">Mairie — Nogent-le-Rotrou</div>
+        <div class="exp-desc">Découverte de l'environnement IT en collectivité, support utilisateurs et interventions techniques.</div>
+      </div>
+      <div class="exp-period">Sept. → Oct. 2023</div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-role">Stage RIISC</div>
+        <div class="exp-company">Sécurité Civile — Nogent-le-Rotrou</div>
+        <div class="exp-desc">Immersion dans un environnement opérationnel exigeant, sensibilisation aux protocoles de sécurité et gestion de crise.</div>
+      </div>
+      <div class="exp-period">Fév. → Mars 2022</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="certs-section">
+  <div class="section-label">Certifications</div>
+  <h2 class="section-title">Habilitations & objectifs</h2>
+  <div class="certs-grid">
+
+    <div class="cert-card obtained">
+      <div class="cert-header">
+        <div class="cert-logo">⚡</div>
+        <span class="cert-status ok">Obtenu</span>
+      </div>
+      <div class="cert-name">Habilitation Électrique</div>
+      <div class="cert-org">Certification professionnelle</div>
+      <div class="cert-year">En cours de validité</div>
+    </div>
+
+    <div class="cert-card inprogress">
+      <div class="cert-header">
+        <div class="cert-logo" style="background: #e8f0fe; padding: 4px;">
+          <!-- CompTIA Network+ logo -->
+          <svg width="34" height="34" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" rx="12" fill="#C8202F"/>
+            <text x="60" y="52" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="white">NET</text>
+            <text x="60" y="78" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="18" font-weight="700" fill="white">WORK+</text>
+            <text x="60" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">CompTIA</text>
+          </svg>
+        </div>
+        <span class="cert-status planned">Objectif 2026</span>
+      </div>
+      <div class="cert-name">CompTIA Network+</div>
+      <div class="cert-org">CompTIA</div>
+      <div class="cert-year">Fondamentaux réseaux & protocoles</div>
+    </div>
+
+    <div class="cert-card inprogress">
+      <div class="cert-header">
+        <div class="cert-logo" style="background: #e8f0fe; padding: 4px;">
+          <!-- CompTIA Security+ logo -->
+          <svg width="34" height="34" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" rx="12" fill="#C8202F"/>
+            <text x="60" y="52" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="24" font-weight="900" fill="white">SECU</text>
+            <text x="60" y="76" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="21" font-weight="700" fill="white">RITY+</text>
+            <text x="60" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">CompTIA</text>
+          </svg>
+        </div>
+        <span class="cert-status planned">Objectif 2026</span>
+      </div>
+      <div class="cert-name">CompTIA Security+</div>
+      <div class="cert-org">CompTIA</div>
+      <div class="cert-year">Sécurité des systèmes d'information</div>
+    </div>
+
+    <div class="cert-card inprogress">
+      <div class="cert-header">
+        <div class="cert-logo" style="background: #e8f4fd; padding: 4px;">
+          <!-- Cisco CCNA logo -->
+          <svg width="34" height="34" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <rect width="120" height="120" rx="12" fill="#1BA0D7"/>
+            <!-- Cisco wave bars -->
+            <rect x="18" y="62" width="10" height="22" rx="5" fill="white" opacity="0.9"/>
+            <rect x="33" y="50" width="10" height="34" rx="5" fill="white" opacity="0.9"/>
+            <rect x="48" y="40" width="10" height="44" rx="5" fill="white" opacity="0.9"/>
+            <rect x="63" y="50" width="10" height="34" rx="5" fill="white" opacity="0.9"/>
+            <rect x="78" y="62" width="10" height="22" rx="5" fill="white" opacity="0.9"/>
+            <rect x="93" y="72" width="10" height="12" rx="5" fill="white" opacity="0.5"/>
+            <text x="60" y="108" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="14" font-weight="900" fill="white">CCNA</text>
+          </svg>
+        </div>
+        <span class="cert-status planned">Objectif 2027</span>
+      </div>
+      <div class="cert-name">CCNA</div>
+      <div class="cert-org">Cisco</div>
+      <div class="cert-year">Routing, Switching & Sécurité réseau</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FORMATION -->
+<section id="formation">
+  <div class="section-label">Formation</div>
+  <h2 class="section-title">Diplômes</h2>
+  <div class="edu-list">
+    <div class="edu-item">
+      <div class="edu-dot"></div>
+      <div>
+        <div class="edu-title">BTS TSSR — Technicien Supérieur Systèmes et Réseaux <span style="font-size:0.75rem; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); padding: 2px 10px; border-radius: 99px; font-weight:500; margin-left:8px;">En cours</span></div>
+        <div class="edu-school">EKOD, Le Mans</div>
+      </div>
+      <div class="edu-period">2024 → 2026</div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-dot" style="background: var(--accent2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent2) 15%, transparent);"></div>
+      <div>
+        <div class="edu-title">Bachelor AIS — Administrateur Infrastructure Sécurisé <span style="font-size:0.75rem; background: color-mix(in srgb, var(--accent2) 15%, transparent); color: var(--accent2); padding: 2px 10px; border-radius: 99px; font-weight:500; margin-left:8px;">Objectif</span></div>
+        <div class="edu-school">EKOD, Le Mans</div>
+      </div>
+      <div class="edu-period">2026 → 2027</div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-dot" style="background: var(--text2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--text2) 15%, transparent);"></div>
+      <div>
+        <div class="edu-title">Bac Pro — Systèmes Numériques</div>
+        <div class="edu-school">Lycée des Métiers Sully, Nogent-le-Rotrou</div>
+      </div>
+      <div class="edu-period">2021 → 2024</div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-dot" style="background: var(--text2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--text2) 15%, transparent);"></div>
+      <div>
+        <div class="edu-title">Diplôme National du Brevet</div>
+        <div class="edu-school">Lycée Nermont, Nogent-le-Rotrou</div>
+      </div>
+      <div class="edu-period">2020 → 2021</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-bg"></div>
+  <div class="section-label" style="justify-content: center;">Contact</div>
+  <h2 class="contact-title">Travaillons<br>ensemble.</h2>
+  <p class="contact-sub">Je suis disponible pour une alternance à partir de septembre 2026.<br>N'hésitez pas à me contacter.</p>
+  <div class="contact-links">
+    <a href="mailto:degradot.axel@gmail.com" class="contact-link">
+      ✉️ degradot.axel@gmail.com
+    </a>
+    <a href="tel:0628647188" class="contact-link">
+      📞 06 28 64 71 88
+    </a>
+    <a href="https://linkedin.com/in/axel-degradot" target="_blank" class="contact-link">
+      💼 LinkedIn
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Axel DEGRADOT</span>
+  <span>Administrateur d'Infrastructure Sécurisée</span>
+</footer>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  }
+
+  function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburger');
+    const isOpen = menu.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Intersection observer for subtle entrance animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.style.opacity = '1';
+        el.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.skill-card, .exp-item, .cert-card, .edu-item, .stat-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
